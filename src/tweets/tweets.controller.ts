@@ -23,6 +23,16 @@ export class TweetsController {
     return this.tweetsService.create(createTweetDto);
   }
 
+  @Get(':uuid')
+  async findOne(@Req() req: Request) {
+    return this.tweetsService.findOneOrFail({ where: { uuid: req.params.uuid } });
+  }
+
+  @Get('/username/:username')
+  async findByUsername(@Req() req: Request) {
+    return this.tweetsService.findByUsername(req.params.username);
+  }
+
   @Get()
   async findAll() {
     return this.tweetsService.findMany({

@@ -24,6 +24,11 @@ export class TweetsService extends CrudBaseService<Tweet, CreateTweetDto, Update
         return super.create({ ...dto, user });
     }
 
+    async findByUsername(username: string): Promise<Tweet[]> {
+        const user = await this.usersService.findOneOrFail({ where: { username }, relations: ['tweets'] });
+        return user.tweets;
+    }
+
     async update(criteria: FindOneOptions<Tweet>, dto: UpdateTweetDto & { userUuid: string }): Promise<Tweet> {
         const user = await this.usersService.findOneOrFail({ where: { uuid: dto.userUuid } });
         const tweet = await super.findOneOrFail(criteria);

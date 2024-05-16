@@ -4,12 +4,15 @@ import {
   CreateDateColumn,
   Entity,
   Generated,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { RefreshToken } from '../../refresh-tokens/entities/refresh-token.entities';
 import { Tweet } from 'src/tweets/entities/tweet.entity';
+import { File } from 'src/files/entities/file.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -20,11 +23,20 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   uuid!: string;
 
+  @Column({
+    type: 'text',
+    nullable: true
+  })
+  biography: string;
+
   @Column({ unique: true })
   username!: string;
 
   @Column()
   password!: string;
+
+  @OneToOne(() => File, { nullable: true })
+  avatarFile!: File;
 
   @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.user)
   refreshTokens: RefreshToken[];

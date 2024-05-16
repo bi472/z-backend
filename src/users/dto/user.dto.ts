@@ -17,6 +17,8 @@ export class UserDto {
   @ApiProperty()
   username!: string;
 
+  
+
   @Expose()
   @ApiProperty()
   createdAt!: Date;

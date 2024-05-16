@@ -63,7 +63,6 @@ export class AuthService {
     ip: string,
     authRefreshDTO: AuthRefreshDTO,
   ) {
-    console.log('refresh', token, userAgent, ip, authRefreshDTO);
     const refreshToken = await this.refreshTokensService.findByToken(token);
     if (
       !refreshToken ||

@@ -76,4 +76,6 @@ export class UsersController {
   async remove(@Param('uuid') uuid: string) {
     return this.usersService.delete({ where: { uuid: uuid } });
   }
+
+  
 }

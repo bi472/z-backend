@@ -7,6 +7,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './authentication/auth.module';
 import { RefreshTokensModule } from './refresh-tokens/refresh-tokens.module';
 import { TweetsModule } from './tweets/tweets.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -29,6 +31,7 @@ import { TweetsModule } from './tweets/tweets.module';
     AuthModule,
     RefreshTokensModule,
     TweetsModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
