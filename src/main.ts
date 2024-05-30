@@ -18,6 +18,11 @@ async function bootstrap() {
 
   SwaggerModule.setup('/api/docs', app, document);
 
+  app.enableCors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  });
+
   app.use(cookieParser());
 
   app.useGlobalPipes(

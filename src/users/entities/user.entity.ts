@@ -4,7 +4,13 @@ import {
   CreateDateColumn,
   Entity,
   Generated,
+  
   JoinColumn,
+  
+  JoinTable,
+  
+  ManyToMany,
+  
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -13,6 +19,7 @@ import {
 import { RefreshToken } from '../../refresh-tokens/entities/refresh-token.entities';
 import { Tweet } from 'src/tweets/entities/tweet.entity';
 import { File } from 'src/files/entities/file.entity';
+import { Notification } from 'src/notifications/entities/notification.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -43,6 +50,25 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Tweet, (tweet) => tweet.user)
   tweets: Tweet[];
+
+  @ManyToMany(() => Tweet, (tweet) => tweet.likedBy)
+  @JoinTable()
+  likedTweets: Tweet[];
+
+  @ManyToMany(() => Tweet, (tweet) => tweet.bookmarkedBy)
+  @JoinTable()
+  bookmarkedTweets: Tweet[];
+
+  @ManyToMany(() => User, (user) => user.following)
+  @JoinTable()
+  followers: User[];
+
+  @ManyToMany(() => User, (user) => user.followers)
+  following: User[];
+
+  @OneToMany(() => Notification, (notification) => notification.user)
+  @JoinColumn()
+  notifications: Notification[];
 
   @CreateDateColumn()
   createdAt!: Date;

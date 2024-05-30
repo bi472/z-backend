@@ -8,6 +8,8 @@ import {
   Param,
   Patch,
   Post,
+  Req,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import {UsersService} from './users.service';
@@ -16,6 +18,8 @@ import {UpdateUserDto} from './dto/update-user.dto';
 import {UserDto} from './dto/user.dto';
 import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {TransformInterceptor} from "../common/transform.interceptor";
+import { User } from './entities/user.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('users')
 @Controller('users')
@@ -40,8 +44,8 @@ export class UsersController {
     type: UserDto,
   })
   @Get()
-  async findAll(): Promise<UserDto[]> {
-    return this.usersService.findMany();
+  async findAll(): Promise<User[]> {
+    return this.usersService.findMany({relations: ['followers', 'following']});
   }
 
   @ApiOperation({ summary: 'Get user by UUID' })
@@ -59,6 +63,7 @@ export class UsersController {
     status: HttpStatus.OK,
     type: UserDto,
   })
+  @UseGuards(AuthGuard('jwt'))
   @Patch(':uuid')
   async update(
     @Param('uuid') uuid: string,
@@ -72,10 +77,38 @@ export class UsersController {
     status: HttpStatus.OK,
     type: UserDto,
   })
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':uuid')
   async remove(@Param('uuid') uuid: string) {
     return this.usersService.delete({ where: { uuid: uuid } });
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @ApiOperation({ summary: 'Follow to user' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: UserDto,
+  })
+  @Patch(':uuid/follow')
+  async follow(
+    @Param('uuid') uuid: string,
+    @Req () req: Request & { user: { uuid: string, username: string } }
+  ) {
+    await this.usersService.follow(uuid, req.user.uuid);
+    return this.usersService.findOneOrFail({ where: { uuid: uuid } , relations: ['following']});
+  }
+
+  @ApiOperation({ summary: 'Unfollow to user' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: UserDto,
+  })
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':uuid/follow')
+  async unfollow(
+    @Param('uuid') uuid: string,
+    @Req () req: Request & { user: { uuid: string, username: string } }) {
+    return this.usersService.unfollow(uuid, req.user.uuid);
+  }
   
 }

@@ -7,6 +7,7 @@ import {UpdateTweetDto} from '../dto/update-tweet.dto';
 import banWords from 'src/assets/ban_words';
 import {InjectRepository} from '@nestjs/typeorm';
 import {UsersService} from 'src/users/users.service';
+import { NotificationsService } from 'src/notifications/notifications.service';
 
 @Injectable()
 export class TweetFilterDecorator extends TweetsService implements OnModuleInit {
@@ -16,8 +17,9 @@ export class TweetFilterDecorator extends TweetsService implements OnModuleInit 
         @InjectRepository(Tweet)
         protected tweetsRepository: Repository<Tweet>,
         protected usersService: UsersService,
+        protected notificationsService: NotificationsService
     ) {
-        super(tweetsRepository, usersService);
+        super(tweetsRepository, usersService, notificationsService);
     }
     
 

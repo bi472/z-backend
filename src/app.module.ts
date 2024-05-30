@@ -9,6 +9,7 @@ import { RefreshTokensModule } from './refresh-tokens/refresh-tokens.module';
 import { TweetsModule } from './tweets/tweets.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { FilesModule } from './files/files.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { FilesModule } from './files/files.module';
     RefreshTokensModule,
     TweetsModule,
     FilesModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -16,6 +16,16 @@ export class TweetDto {
     @ApiProperty()
     @Type(() => UserDto)
     user!: UserDto;
+
+    @Expose()
+    @ApiProperty()
+    @Type(() => UserDto)
+    likedBy!: UserDto[];
+
+    @Expose()
+    @ApiProperty()
+    @Type(() => UserDto)
+    bookmarkedBy!: UserDto[];
     
     @Expose()
     @ApiProperty()
