@@ -20,6 +20,7 @@ import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {TransformInterceptor} from "../common/transform.interceptor";
 import { User } from './entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { TweetDto } from 'src/tweets/dto/tweet.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -83,6 +84,27 @@ export class UsersController {
     return this.usersService.delete({ where: { uuid: uuid } });
   }
 
+  @ApiOperation({ summary: 'Get followers of user' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: UserDto,
+  })
+  @Get(':uuid/followers')
+  async followers(@Param('uuid') uuid: string) {
+    return this.usersService.findFollowers(uuid);
+  }
+
+  @ApiOperation({ summary: 'Get following of user' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: UserDto,
+  })
+  @Get(':uuid/following')
+  async following(@Param('uuid') uuid: string) {
+    return this.usersService.findFollowing(uuid);
+  }
+
+
   @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Follow to user' })
   @ApiResponse({
@@ -110,5 +132,17 @@ export class UsersController {
     @Req () req: Request & { user: { uuid: string, username: string } }) {
     return this.usersService.unfollow(uuid, req.user.uuid);
   }
+
+  @ApiOperation({ summary: 'Get likes of user' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: TweetDto,
+  })
+  @Get(':uuid/likes')
+  async likes(@Param('uuid') uuid: string) {
+    return this.usersService.findLikes(uuid);
+  }
+
+
   
 }

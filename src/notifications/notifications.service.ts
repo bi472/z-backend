@@ -7,6 +7,7 @@ import { Notification } from './entities/notification.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
+import { Inject, forwardRef } from '@nestjs/common';
 
 @Injectable()
 export class NotificationsService extends CrudBaseService<
@@ -16,7 +17,8 @@ export class NotificationsService extends CrudBaseService<
   constructor(
     @InjectRepository(Notification)
     protected notificationsRepository: Repository<Notification>,
-    protected usersService: UsersService
+    @Inject(forwardRef(() => UsersService))
+    protected usersService: UsersService,
   ) {
     super(notificationsRepository);
   }

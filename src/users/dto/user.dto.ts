@@ -20,19 +20,19 @@ export class UserDto {
 
   @Expose()
   @ApiProperty()
-  bookmarkedTweets!: string[];
+  bookmarkedTweets: string[];
 
   @Expose()
   @ApiProperty()
-  likedTweets!: string[];
+  likedTweets: string[];
 
   @Expose()
   @ApiProperty()
-  tweets!: string[];
+  tweets: string[];
 
   @Expose()
   @ApiProperty()
-  biography!: string;
+  biography: string;
 
   @Expose()
   @ApiProperty()

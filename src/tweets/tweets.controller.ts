@@ -62,8 +62,6 @@ export class TweetsController {
   async like(
     @Req() req: Request & { user: { uuid: string, username: string } }
   ) {
-    console.log(req.user.uuid);
-    console.log(req.params.uuid);
     return this.tweetsService.like(req.params.uuid, req.user.uuid);
   }
 

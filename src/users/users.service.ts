@@ -5,7 +5,11 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { CrudBaseService } from '../common/crud-base.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, forwardRef, Inject } from '@nestjs/common';
+import { Tweet } from 'src/tweets/entities/tweet.entity';
+import { CreateNotificationDto } from 'src/notifications/dto/create-notification.dto';
+import { NotificationType } from 'src/notifications/notification-type.enum';
+import { NotificationsService } from 'src/notifications/notifications.service';
 
 export class UsersService extends CrudBaseService<
   User,
@@ -15,6 +19,8 @@ export class UsersService extends CrudBaseService<
   constructor(
     @InjectRepository(User)
     public usersRepository: Repository<User>,
+    @Inject(forwardRef(() => NotificationsService))
+    private readonly notificationsService: NotificationsService,
   ) {
     super(usersRepository);
   }
@@ -34,6 +40,12 @@ export class UsersService extends CrudBaseService<
     // Добавляем подписчика к списку подписчиков профиля и профиль к списку подписок подписчика
     profile.followers.push(subscriber);
     subscriber.following.push(profile);
+
+    const createNotificationDto: CreateNotificationDto = {
+      type: NotificationType.FOLLOW,
+      createdBy: subscriber,
+      userId: profile.uuid,
+    }
   
     // Сохраняем изменения
     await super.save(profile);
@@ -79,5 +91,20 @@ export class UsersService extends CrudBaseService<
   ): Promise<User> {
     dto.password = bcrypt.hashSync(dto.password, 10);
     return super.update(criteria, dto);
+  }
+
+  async findFollowers (uuid: string): Promise<User[]> {
+    const user = await this.findOneOrFail({ where: { uuid }, relations: ['followers'] });
+    return user.followers;
+  }
+
+  async findFollowing (uuid: string): Promise<User[]> {
+    const user = await this.findOneOrFail({ where: { uuid }, relations: ['following'] });
+    return user.following;
+  }
+
+  async findLikes (uuid: string): Promise<Tweet[]> {
+    const user = await this.findOneOrFail({ where: { uuid }, relations: ['likedTweets'] });
+    return user.likedTweets;
   }
 }
