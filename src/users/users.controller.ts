@@ -20,7 +20,7 @@ import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {TransformInterceptor} from "../common/transform.interceptor";
 import { User } from './entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
-import { TweetDto } from 'src/tweets/dto/tweet.dto';
+import { TweetDto } from '../tweets/dto/tweet.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -82,6 +82,16 @@ export class UsersController {
   @Delete(':uuid')
   async remove(@Param('uuid') uuid: string) {
     return this.usersService.delete({ where: { uuid: uuid } });
+  }
+
+  @ApiOperation({ summary: 'User by username' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: UserDto,
+  })
+  @Get('username/:username')
+  async findOneByUsername(@Param('username') username: string) {
+    return this.usersService.findOneOrFail({ where: { username: username } });
   }
 
   @ApiOperation({ summary: 'Get followers of user' })

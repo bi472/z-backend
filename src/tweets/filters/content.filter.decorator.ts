@@ -4,10 +4,10 @@ import {CreateTweetDto} from '../dto/create-tweet.dto';
 import {Tweet} from '../entities/tweet.entity';
 import {FindOneOptions, Repository} from 'typeorm';
 import {UpdateTweetDto} from '../dto/update-tweet.dto';
-import banWords from 'src/assets/ban_words';
+import banWords from '../../assets/ban_words';
 import {InjectRepository} from '@nestjs/typeorm';
-import {UsersService} from 'src/users/users.service';
-import { NotificationsService } from 'src/notifications/notifications.service';
+import {UsersService} from '../../users/users.service';
+import { NotificationsService } from '../../notifications/notifications.service';
 
 @Injectable()
 export class TweetFilterDecorator extends TweetsService implements OnModuleInit {

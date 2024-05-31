@@ -1,14 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CrudBaseService } from 'src/common/crud-base.service';
+import { CrudBaseService } from '../common/crud-base.service';
 import { CreateTweetDto } from './dto/create-tweet.dto';
 import { UpdateTweetDto } from './dto/update-tweet.dto';
 import { Tweet } from './entities/tweet.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOneOptions, Repository } from 'typeorm';
-import { UsersService } from 'src/users/users.service';
-import { NotificationsService } from 'src/notifications/notifications.service';
-import { CreateNotificationDto } from 'src/notifications/dto/create-notification.dto';
-import { NotificationType } from 'src/notifications/notification-type.enum';
+import { FindManyOptions, FindOneOptions, In, Repository } from 'typeorm';
+import { UsersService } from '../users/users.service';
+import { NotificationsService } from '../notifications/notifications.service';
+import { CreateNotificationDto } from '../notifications/dto/create-notification.dto';
+import { NotificationType } from '../notifications/notification-type.enum';
 
 @Injectable()
 export class TweetsService extends CrudBaseService<Tweet, CreateTweetDto, UpdateTweetDto> {
@@ -26,6 +26,38 @@ export class TweetsService extends CrudBaseService<Tweet, CreateTweetDto, Update
         return super.create({ ...dto, user });
     }
 
+    async findFollowedBy(criteria: FindManyOptions<Tweet>, followedByUserUuid: string): Promise<Tweet[]> {
+        // Fetch the user who is following others
+        const user = await this.usersService.findOneOrFail({ where: { uuid: followedByUserUuid }, relations: ['following'] });
+    
+        // Get the UUIDs of the users that the given user is following
+        const followedUserUuids = user.following.map(followedUser => followedUser.uuid);
+    
+        // If no users are followed, return an empty array
+        if (followedUserUuids.length === 0) {
+            return [];
+        }
+    
+        // Modify the criteria to include tweets from the followed users
+        const modifiedCriteria: FindManyOptions<Tweet> = {
+            ...criteria,
+            where: {
+                ...criteria.where,
+                user: {
+                    uuid: In(followedUserUuids),
+                },
+            },
+            order: {
+                ...criteria.order,
+                createdAt: 'DESC',  // Assuming you want to order by creation date
+            },
+        };
+    
+        // Fetch the tweets based on the modified criteria
+        return this.tweetsRepository.find(modifiedCriteria);
+    }
+    
+
     async findByUsername(username: string): Promise<Tweet[]> {
         const user = await this.usersService.findOneOrFail({ where: { username } });
         // use query builder to get tweets by user
@@ -37,6 +69,12 @@ export class TweetsService extends CrudBaseService<Tweet, CreateTweetDto, Update
             .getMany();
         return tweets;
     }
+
+    async findByUser(userUuid: string): Promise<Tweet[]> {
+        const user = await this.usersService.findOneOrFail({ where: { uuid: userUuid }, relations: ['tweets'] });
+        return user.tweets
+    }
+
 
     async update(criteria: FindOneOptions<Tweet>, dto: UpdateTweetDto & { userUuid: string }): Promise<Tweet> {
         const user = await this.usersService.findOneOrFail({ where: { uuid: dto.userUuid } });

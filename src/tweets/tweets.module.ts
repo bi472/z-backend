@@ -3,9 +3,9 @@ import { TweetsService } from './tweets.service';
 import { TweetsController } from './tweets.controller';
 import { Tweet } from './entities/tweet.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from 'src/users/users.module';
+import { UsersModule } from '../users/users.module';
 import { TweetFilterDecorator } from './filters/content.filter.decorator';
-import { NotificationsModule } from 'src/notifications/notifications.module';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Tweet]), UsersModule, NotificationsModule],

@@ -1,4 +1,4 @@
-import { User } from "src/users/entities/user.entity";
+import { User } from "../../users/entities/user.entity";
 import { BaseEntity, Column, CreateDateColumn, Entity, Generated, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { NotificationType } from "../notification-type.enum";
 

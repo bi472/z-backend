@@ -10,6 +10,10 @@ import { TweetsModule } from './tweets/tweets.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { FilesModule } from './files/files.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { Notification } from './notifications/entities/notification.entity';
+import { Tweet } from './tweets/entities/tweet.entity';
+import { User } from './users/entities/user.entity';
+import { File } from './files/entities/file.entity';
 
 @Module({
   imports: [

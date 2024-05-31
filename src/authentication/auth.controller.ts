@@ -19,8 +19,8 @@ import { AuthRefreshDTO } from './dto/auth.refresh';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { AuthRegisterDTO } from './dto/auth.register';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UserDto } from 'src/users/dto/user.dto';
-import { TransformInterceptor } from 'src/common/transform.interceptor';
+import { UserDto } from '../users/dto/user.dto';
+import { TransformInterceptor } from '../common/transform.interceptor';
 
 @ApiTags('auth')
 @Controller({ path: 'auth' })

@@ -6,10 +6,10 @@ import { CrudBaseService } from '../common/crud-base.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
 import { ConflictException, forwardRef, Inject } from '@nestjs/common';
-import { Tweet } from 'src/tweets/entities/tweet.entity';
-import { CreateNotificationDto } from 'src/notifications/dto/create-notification.dto';
-import { NotificationType } from 'src/notifications/notification-type.enum';
-import { NotificationsService } from 'src/notifications/notifications.service';
+import { Tweet } from '../tweets/entities/tweet.entity';
+import { CreateNotificationDto } from '../notifications/dto/create-notification.dto';
+import { NotificationType } from '../notifications/notification-type.enum';
+import { NotificationsService } from '../notifications/notifications.service';
 
 export class UsersService extends CrudBaseService<
   User,
@@ -19,8 +19,6 @@ export class UsersService extends CrudBaseService<
   constructor(
     @InjectRepository(User)
     public usersRepository: Repository<User>,
-    @Inject(forwardRef(() => NotificationsService))
-    private readonly notificationsService: NotificationsService,
   ) {
     super(usersRepository);
   }

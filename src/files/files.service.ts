@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
-import { CrudBaseService } from 'src/common/crud-base.service';
+import { CrudBaseService } from '../common/crud-base.service';
 import { File } from './entities/file.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';

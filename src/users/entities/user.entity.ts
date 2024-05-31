@@ -17,9 +17,9 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { RefreshToken } from '../../refresh-tokens/entities/refresh-token.entities';
-import { Tweet } from 'src/tweets/entities/tweet.entity';
-import { File } from 'src/files/entities/file.entity';
-import { Notification } from 'src/notifications/entities/notification.entity';
+import { Tweet } from '../../tweets/entities/tweet.entity';
+import { File } from '../../files/entities/file.entity';
+import { Notification } from '../../notifications/entities/notification.entity';
 
 @Entity('users')
 export class User extends BaseEntity {

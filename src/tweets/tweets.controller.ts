@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Patch, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Patch, Post, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { TweetsService } from './tweets.service';
 import { ApiTags } from '@nestjs/swagger';
 import { TweetDto } from './dto/tweet.dto';
@@ -7,6 +7,7 @@ import { CreateTweetDto } from './dto/create-tweet.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateTweetDto } from './dto/update-tweet.dto';
 import {TransformInterceptor} from "../common/transform.interceptor";
+import { FindManyOptions } from 'typeorm';
 
 @ApiTags('tweets')
 @Controller('tweets')
@@ -28,17 +29,29 @@ export class TweetsController {
     return this.tweetsService.findOneOrFail({ where: { uuid: req.params.uuid } });
   }
 
+  @Get('/user/:uuid')
+  async findByUser(@Req() req: Request) {
+    return this.tweetsService.findByUser(req.params.uuid);
+  }
+
   @Get('/username/:username')
   async findByUsername(@Req() req: Request) {
     return this.tweetsService.findByUsername(req.params.username);
   }
 
   @Get()
-  async findAll() {
-    return this.tweetsService.findMany({
+  async findAll(
+    @Query('followedByUserUuid') followedByUserUuid: string,
+  ) {
+    const criteria: FindManyOptions = {
       relations: ['user'],
       order: { createdAt: 'DESC' },
-    });
+    };
+
+    if (!followedByUserUuid)
+      return this.tweetsService.findMany(criteria);
+    else 
+      return this.tweetsService.findFollowedBy(criteria, followedByUserUuid)
   }
 
   @UseGuards(AuthGuard('jwt'))

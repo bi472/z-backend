@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
-import { CrudBaseService } from 'src/common/crud-base.service';
+import { CrudBaseService } from '../common/crud-base.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Notification } from './entities/notification.entity';
 import { Repository } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/users.service';
+import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
 import { Inject, forwardRef } from '@nestjs/common';
 
 @Injectable()
@@ -17,7 +17,6 @@ export class NotificationsService extends CrudBaseService<
   constructor(
     @InjectRepository(Notification)
     protected notificationsRepository: Repository<Notification>,
-    @Inject(forwardRef(() => UsersService))
     protected usersService: UsersService,
   ) {
     super(notificationsRepository);
