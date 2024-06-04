@@ -93,13 +93,13 @@ export class TweetsController {
 
   @UseGuards(AuthGuard('jwt'))
   @Patch(':uuid/bookmark')
-  async unbookmark(@Req() req: Request & { user: { uuid: string, username: string } }) {
+  async bookmark(@Req() req: Request & { user: { uuid: string, username: string } }) {
     return this.tweetsService.bookmark(req.params.uuid, req.user.uuid);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Delete(':uuid/bookmark')
-  async bookmark(@Req() req: Request & { user: { uuid: string, username: string } }) {
+  async unbookmark(@Req() req: Request & { user: { uuid: string, username: string } }) {
     return this.tweetsService.unbookmark(req.params.uuid, req.user.uuid);
   }
 

@@ -19,8 +19,8 @@ export class NotificationsController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('/readed')
-  findReaded(
+  @Get('/read')
+  findRead(
     @Req() req: Request & { user: { uuid: string, username: string } }
   ) {
     const uuid = req.user.uuid;
@@ -28,8 +28,8 @@ export class NotificationsController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('/unreaded')
-  findUnreaded(
+  @Get('/unread')
+  findUnread(
     @Req() req: Request & { user: { uuid: string, username: string } }
   ) {
     const uuid = req.user.uuid;

@@ -50,7 +50,6 @@ export class AuthController {
     @Req() request,
     @Res() response: Response,
   ) {
-
     const tokens = await this.authService.login(
       request.get('User-Agent'),
       request.ip,

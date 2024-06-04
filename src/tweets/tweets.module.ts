@@ -6,9 +6,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from '../users/users.module';
 import { TweetFilterDecorator } from './filters/content.filter.decorator';
 import { NotificationsModule } from '../notifications/notifications.module';
+import { FilesModule } from '../files/files.module'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Tweet]), UsersModule, NotificationsModule],
+  imports: [TypeOrmModule.forFeature([Tweet]), UsersModule, NotificationsModule, FilesModule],
   controllers: [TweetsController],
   providers: [
     {
