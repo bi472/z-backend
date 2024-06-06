@@ -45,7 +45,7 @@ export class FollowersController {
     @Param('uuid') uuid: string,
     @Req() req: Request & { user: { uuid: string, username: string } }
   ) {
-    const dto: CreateFollowerDto = { subscriberUuid: uuid, profileUuid: req.user.uuid }
+    const dto: CreateFollowerDto = { subscriberUuid: req.user.uuid, profileUuid: uuid }
     return this.followersService.follow(dto)
   }
 
@@ -59,7 +59,7 @@ export class FollowersController {
   async unfollow(
     @Param('uuid') uuid: string,
     @Req() req: Request & { user: { uuid: string, username: string } }) {
-    const dto: DeleteFollowerDto = { subscriberUuid: uuid, profileUuid: req.user.uuid }
+    const dto: DeleteFollowerDto = { subscriberUuid: req.user.uuid, profileUuid: uuid }
     return this.followersService.unfollow(dto)
   }
 }

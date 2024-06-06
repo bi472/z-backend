@@ -14,7 +14,7 @@ export class BookmarksService {
   ) { }
 
   async findAll(userUuid: string): Promise<Tweet[]> {
-    const user = await this.usersService.findOneOrFail({ where: { uuid: userUuid }, relations: ['bookmarkedTweets'] });
+    const user = await this.usersService.findOneOrFail({ where: { uuid: userUuid }, relations: ['bookmarkedTweets']});
     return user.bookmarkedTweets;
   }
 

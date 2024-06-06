@@ -48,8 +48,7 @@ export class FollowersService {
     };
     await this.notificationsService.create(createNotificationDto);
 
-    // Возвращаем подписчика с обновленными данными
-    return subscriber;
+    return this.usersService.findOneOrFail({ where: { uuid: dto.subscriberUuid } , relations: ['following'] });
 }
 
 private async isAlreadyFollowing(profileUuid: string, subscriberUuid: string): Promise<boolean> {
@@ -85,6 +84,8 @@ private async addFollower(profileUuid: string, subscriberUuid: string): Promise<
 
     // Сохраняем изменения
     await this.usersService.save(profile);
-    return this.usersService.save(subscriber);
+    await this.usersService.save(subscriber);
+
+    return this.usersService.findOneOrFail({ where: { uuid: dto.subscriberUuid }, relations: ['following'] });
   }
 }

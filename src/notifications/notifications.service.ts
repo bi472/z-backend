@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { Inject, forwardRef } from '@nestjs/common';
+import { NotificationType } from './notification-type.enum';
 
 @Injectable()
 export class NotificationsService extends CrudBaseService<
@@ -23,15 +24,20 @@ export class NotificationsService extends CrudBaseService<
   }
 
   async create(dto: CreateNotificationDto): Promise<Notification> {
-  const user = await this.usersService.findOneOrFail({ where: { uuid: dto.userId } });
-
-  // Проверка существующего уведомления
-  const existingNotification = await this.notificationsRepository.findOne({ where: { type: dto.type, user: user } });
+  const user = await this.usersService.findOneOrFail({ where: { uuid: dto.userId }, relations: ['notifications', 'notifications.createdBy']});
+  // Проверка на существующее уведомление
+  const existingNotification = user.notifications.find(notification => {
+    if (notification.type === dto.type && notification.read === false) {
+      if (notification.type === NotificationType.FOLLOW) {
+        return notification.createdBy.uuid === dto.createdBy.uuid;
+      }
+      return notification.tweetId === dto.tweetId;
+    }
+    return false;
+  });
 
   if (existingNotification) {
-    // Обновление существующего уведомления
-    const updatedNotification = this.notificationsRepository.merge(existingNotification, dto);
-    return this.notificationsRepository.save(updatedNotification);
+    return existingNotification;
   }
 
   // Создание нового уведомления, если существующего нет

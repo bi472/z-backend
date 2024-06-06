@@ -15,7 +15,7 @@ export class NotificationsController {
     @Req() req: Request & { user: { uuid: string, username: string } }
   ) {
     const uuid = req.user.uuid;
-    return this.notificationsService.findMany({ where: { user: { uuid } }, relations: ['createdBy']});
+    return this.notificationsService.findMany({ where: { user: { uuid } }, relations: ['createdBy'], order: { createdAt: 'DESC' } });
   }
 
   @UseGuards(AuthGuard('jwt'))
