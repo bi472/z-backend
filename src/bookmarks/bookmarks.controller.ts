@@ -27,7 +27,7 @@ export class BookmarksController {
 
   @ApiOperation({summary: 'Create a bookmark'})
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: 'Create a bookmark',
   })
   @UseGuards(AuthGuard('jwt'))

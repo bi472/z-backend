@@ -1,34 +1,65 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Req, UseGuards } from '@nestjs/common';
 import { FollowersService } from './followers.service';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { UserDto } from '../users/dto/user.dto';
 import { CreateFollowerDto } from './dto/create-follower.dto';
-import { UpdateFollowerDto } from './dto/update-follower.dto';
+import { DeleteFollowerDto } from './dto/delete-followers.dto';
 
-@Controller('followers')
+@ApiTags('user-followers')
+@Controller('user-followers')
 export class FollowersController {
-  constructor(private readonly followersService: FollowersService) {}
+  constructor(
+    private readonly followersService: FollowersService
+  ) { }
 
-  @Post()
-  create(@Body() createFollowerDto: CreateFollowerDto) {
-    return this.followersService.create(createFollowerDto);
+  @ApiOperation({ summary: 'Get followers of user' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: UserDto
+  })
+  @Get(':uuid/followers')
+  async followers(@Param('uuid') uuid: string) {
+    return this.followersService.findFollowers(uuid)
   }
 
-  @Get()
-  findAll() {
-    return this.followersService.findAll();
+  @ApiOperation({ summary: 'Get following of user' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: UserDto
+  })
+  @Get(':uuid/following')
+  async following(@Param('uuid') uuid: string) {
+    return this.followersService.findFollowing(uuid)
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.followersService.findOne(+id);
+
+  @UseGuards(AuthGuard('jwt'))
+  @ApiOperation({ summary: 'Follow to user' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: UserDto
+  })
+  @Patch(':uuid/follow')
+  async follow(
+    @Param('uuid') uuid: string,
+    @Req() req: Request & { user: { uuid: string, username: string } }
+  ) {
+    const dto: CreateFollowerDto = { subscriberUuid: uuid, profileUuid: req.user.uuid }
+    return this.followersService.follow(dto)
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFollowerDto: UpdateFollowerDto) {
-    return this.followersService.update(+id, updateFollowerDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.followersService.remove(+id);
+  @ApiOperation({ summary: 'Unfollow to user' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: UserDto
+  })
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':uuid/follow')
+  async unfollow(
+    @Param('uuid') uuid: string,
+    @Req() req: Request & { user: { uuid: string, username: string } }) {
+    const dto: DeleteFollowerDto = { subscriberUuid: uuid, profileUuid: req.user.uuid }
+    return this.followersService.unfollow(dto)
   }
 }

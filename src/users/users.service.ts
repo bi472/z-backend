@@ -24,51 +24,7 @@ export class UsersService extends CrudBaseService<
     }
 
 
-    async follow(profileUuid: string, subscriberUuid: string): Promise<User> {
-      // Загружаем профиль и подписчика вместе с их связями
-      const profile = await this.findOneOrFail({ where: { uuid: profileUuid }, relations: ['followers'] });
-      const subscriber = await this.findOneOrFail({ where: { uuid: subscriberUuid }, relations: ['following'] });
-
-      const alreadyFollowing = profile.followers.some(follower => follower.uuid === subscriberUuid);
-      if (alreadyFollowing) {
-        // Если подписчик уже подписан на профиль, выбрасываем исключение
-        throw new ConflictException('User is already following this profile');
-      }
-
-      // Добавляем подписчика к списку подписчиков профиля и профиль к списку подписок подписчика
-      profile.followers.push(subscriber);
-      subscriber.following.push(profile);
-
-      const createNotificationDto: CreateNotificationDto = {
-        type: NotificationType.FOLLOW,
-        createdBy: subscriber,
-        userId: profile.uuid,
-      }
-
-      // Сохраняем изменения
-      await super.save(profile);
-      return super.save(subscriber);
-    }
-
-    async unfollow(profileUuid: string, subscriberUuid: string): Promise<User> {
-      // Загружаем профиль и подписчика вместе с их связями
-      const profile = await this.findOneOrFail({ where: { uuid: profileUuid }, relations: ['followers'] });
-      const subscriber = await this.findOneOrFail({ where: { uuid: subscriberUuid }, relations: ['following'] });
-
-      const notFollowing = !profile.followers.some(follower => follower.uuid === subscriberUuid);
-      if (notFollowing) {
-        // Если подписчик не подписан на профиль, выбрасываем исключение
-        throw new ConflictException('User is not following this profile');
-      }
-
-      // Удаляем подписчика из списка подписчиков профиля и профиль из списка подписок подписчика
-      profile.followers = profile.followers.filter((u) => u.uuid !== subscriber.uuid);
-      subscriber.following = subscriber.following.filter((u) => u.uuid !== profile.uuid);
-
-      // Сохраняем изменения
-      await super.save(profile);
-      return super.save(subscriber);
-    }
+    
 
 
     async create(dto: CreateUserDto): Promise<User> {
