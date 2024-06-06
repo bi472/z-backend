@@ -136,11 +136,6 @@ export class TweetsService extends CrudBaseService<Tweet, CreateTweetDto, Update
         return updatedTweet;
     }
     
-    async getBookmarks(userUuid: string): Promise<Tweet[]> {
-        const user = await this.usersService.findOneOrFail({ where: { uuid: userUuid }, relations: ['bookmarkedTweets'] });
-        return user.bookmarkedTweets;
-    }
-
 
     async bookmark(uuid: string, userUuid: string): Promise<Tweet> {
         const tweet = await this.findOneOrFail({ where: { uuid }, relations: ['bookmarkedBy'] });

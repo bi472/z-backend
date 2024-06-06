@@ -37,7 +37,7 @@ export class TweetsController {
   @Get('/username/:username')
   async findByUsername(@Req() req: Request) {
     return this.tweetsService.findByUsername(req.params.username);
-  }
+  }8
 
   @Get()
   async findAll(
@@ -84,23 +84,4 @@ export class TweetsController {
     
     return this.tweetsService.unlike(req.params.uuid, req.user.uuid);
   }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Get('bookmarks/all')
-  async getBookmarks(@Req() req: Request & { user: { uuid: string, username: string } }) {
-    return this.tweetsService.getBookmarks(req.user.uuid);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Patch(':uuid/bookmark')
-  async bookmark(@Req() req: Request & { user: { uuid: string, username: string } }) {
-    return this.tweetsService.bookmark(req.params.uuid, req.user.uuid);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Delete(':uuid/bookmark')
-  async unbookmark(@Req() req: Request & { user: { uuid: string, username: string } }) {
-    return this.tweetsService.unbookmark(req.params.uuid, req.user.uuid);
-  }
-
 }
