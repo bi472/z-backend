@@ -18,8 +18,10 @@ async function bootstrap() {
 
   SwaggerModule.setup('/api/docs', app, document);
 
+  const origin = process.env.FRONTEND_URL;
+
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin,
     credentials: true,
   });
 
@@ -27,11 +29,11 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // Автоматически удаляет поля, которые не ожидаются
-      transform: true, // Преобразовывает объекты в их классы-типы DTO
-      forbidNonWhitelisted: true, // Запрещает объектам иметь поля, которых нет в DTO
+      whitelist: true, 
+      transform: true, 
+      forbidNonWhitelisted: true, 
       transformOptions: {
-        enableImplicitConversion: true, // Включает неявное преобразование типов
+        enableImplicitConversion: true, 
       },
     }),
   );

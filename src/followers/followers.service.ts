@@ -52,7 +52,7 @@ export class FollowersService {
     return subscriber;
 }
 
-async isAlreadyFollowing(profileUuid: string, subscriberUuid: string): Promise<boolean> {
+private async isAlreadyFollowing(profileUuid: string, subscriberUuid: string): Promise<boolean> {
     const profile = await this.usersService.findOneOrFail({ where: { uuid: profileUuid }, relations: ['followers'] });
     return profile.followers.some(follower => follower.uuid === subscriberUuid);
 }

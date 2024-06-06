@@ -94,9 +94,7 @@ export class UsersController {
     @Get('username/:username')
     async findOneByUsername(@Param('username') username: string) {
         return this.usersService.findOneOrFail({ where: { username: username } })
-    }
-
-    
+    }  
 
     @ApiOperation({ summary: 'Get likes of user' })
     @ApiResponse({
@@ -107,9 +105,4 @@ export class UsersController {
     async likes(@Param('uuid') uuid: string) {
         return this.usersService.findLikes(uuid)
     }
-
-
-
-
-
 }

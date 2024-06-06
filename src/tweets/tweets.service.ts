@@ -135,29 +135,4 @@ export class TweetsService extends CrudBaseService<Tweet, CreateTweetDto, Update
     
         return updatedTweet;
     }
-    
-
-    async bookmark(uuid: string, userUuid: string): Promise<Tweet> {
-        const tweet = await this.findOneOrFail({ where: { uuid }, relations: ['bookmarkedBy'] });
-        const user = await this.usersService.findOneOrFail({ where: { uuid: userUuid } });
-        const isBookmarked = tweet.bookmarkedBy.some(u => u.uuid === user.uuid);
-        if (isBookmarked) {
-            throw new BadRequestException('You have already bookmarked this tweet');
-        }
-        tweet.bookmarkedBy.push(user);
-        return this.tweetsRepository.save(tweet);
-    }
-
-    async unbookmark(uuid: string, userUuid: string): Promise<Tweet> {
-        const tweet = await this.findOneOrFail({ where: { uuid }, relations: ['bookmarkedBy'] });
-        const user = await this.usersService.findOneOrFail({ where: { uuid: userUuid } });
-
-        const bookmarkedUser = tweet.bookmarkedBy.find(bookmarkedUser => bookmarkedUser.uuid === user.uuid);
-        if (!bookmarkedUser) {
-            throw new BadRequestException('You have not bookmarked this tweet');
-        }
-
-        tweet.bookmarkedBy = tweet.bookmarkedBy.filter(u => u.uuid !== user.uuid);
-        return this.tweetsRepository.save(tweet);
-    }
 }

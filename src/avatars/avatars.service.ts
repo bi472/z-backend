@@ -6,8 +6,8 @@ import {UsersService} from "../users/users.service";
 @Injectable()
 export class AvatarsService {
     constructor(
-        private usersService: UsersService,
-        private filesService: FilesService
+        private readonly usersService: UsersService,
+        private readonly filesService: FilesService
     ) {
     }
 

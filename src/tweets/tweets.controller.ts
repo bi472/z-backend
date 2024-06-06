@@ -69,19 +69,4 @@ export class TweetsController {
   async remove(@Req() req: Request & { user: { uuid: string, username: string } }) {
     return this.tweetsService.remove({ where: { uuid: req.params.uuid }, relations: ['user'] }, req.user.uuid);
   }
-  
-  @UseGuards(AuthGuard('jwt'))
-  @Patch(':uuid/like')
-  async like(
-    @Req() req: Request & { user: { uuid: string, username: string } }
-  ) {
-    return this.tweetsService.like(req.params.uuid, req.user.uuid);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Delete(':uuid/like')
-  async unlike(@Req() req: Request & { user: { uuid: string, username: string } }) {
-    
-    return this.tweetsService.unlike(req.params.uuid, req.user.uuid);
-  }
 }

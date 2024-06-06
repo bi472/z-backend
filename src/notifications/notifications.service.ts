@@ -23,9 +23,20 @@ export class NotificationsService extends CrudBaseService<
   }
 
   async create(dto: CreateNotificationDto): Promise<Notification> {
-    const user = await this.usersService.findOneOrFail({ where: { uuid: dto.userId } });
-    return super.create({ ...dto, user });
+  const user = await this.usersService.findOneOrFail({ where: { uuid: dto.userId } });
+
+  // Проверка существующего уведомления
+  const existingNotification = await this.notificationsRepository.findOne({ where: { type: dto.type, user: user } });
+
+  if (existingNotification) {
+    // Обновление существующего уведомления
+    const updatedNotification = this.notificationsRepository.merge(existingNotification, dto);
+    return this.notificationsRepository.save(updatedNotification);
   }
+
+  // Создание нового уведомления, если существующего нет
+  return super.create({ ...dto, user });
+}
   
   async read(uuid: string): Promise<Notification> {
     const notification = await this.findOneOrFail({ where: { uuid } });
