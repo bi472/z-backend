@@ -88,7 +88,7 @@ z-backend works stably.
 
 ## Related projects
 
-(z-frontend)[https://github.com/bi472/z-frontend]
+[z-frontend](https://github.com/bi472/z-frontend)
 
 ## About
 
