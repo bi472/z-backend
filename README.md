@@ -1,73 +1,91 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# z-backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Demo link:
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Coming soon
 
-## Description
+## Documentation
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Coming soon
 
-## Installation
+## Table of Content:
 
-```bash
-$ npm install
-```
+- About The App
+- Technologies
+- Setup
+- Environment Variables
+- To-Do
+- Documentation
+- Status
 
-## Running the app
+## About The App
 
-```bash
-# development
-$ npm run start
+z-backend is an application similar to Twitter, aiming to implement a tree-like structure for message replies.
 
-# watch mode
-$ npm run start:dev
+## Technologies
 
-# production mode
-$ npm run start:prod
-```
+This project uses:
 
-## Test
+- **Node.js**
+- **NestJS**
+- **TypeScript**
+- **TypeORM**
+- **PostgreSQL**
+- **JWT** for authentication (access and refresh tokens)
+- **Multer** for file handling
+- **Jest** for testing
+
+## Setup
 
 ```bash
-# unit tests
-$ npm run test
+git clone https://github.com/bi472/z-backend.git
+cd z-backend
 
-# e2e tests
-$ npm run test:e2e
+# Install dependencies
+npm install
 
-# test coverage
-$ npm run test:cov
+# Create .env file based on .env-example
+cp .env-example .env
+nano .env
+
+# Start the application
+npm run start
 ```
 
-## Support
+Done!
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Environment Variables
 
-## Stay in touch
+```plaintext
+PORT=4000
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=yourusername
+DB_PASSWORD=yourpassword
+DB_DATABASE=yourdbname
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+JWT_SECRET=yourjwtsecret
+JWT_EXPIRATION_TIME=3600
+REFRESH_SESSIONS_MAX_COUNT=5
 
-## License
+MULTER_DEST=./uploads
+MULTER_LIMIT_SIZE=5MB
 
-Nest is [MIT licensed](LICENSE).
+FRONTEND_URL=http://localhost:3000
+```
+
+## To-Do
+
+- Add transform interceptors to all routes.
+- Complete Swagger documentation.
+- Write tests for services.
+
+## Status
+
+z-backend works stably. Main features are implemented.
+
+z-backend works stably.
+
+## About
+
+No description, website, or topics provided. 
