@@ -47,14 +47,8 @@ export class UsersService extends CrudBaseService<
       return super.update(criteria, dto);
     }
 
-    async findFollowers (uuid: string): Promise<User[]> {
-      const user = await this.findOneOrFail({ where: { uuid }, relations: ['followers'] });
-      return user.followers;
-    }
-
-    async findFollowing (uuid: string): Promise<User[]> {
-      const user = await this.findOneOrFail({ where: { uuid }, relations: ['following'] });
-      return user.following;
+    async updateBio(uuid: string, biography: string): Promise<User> {
+      return super.update({ where: { uuid } }, { biography });
     }
 
     async findLikes (uuid: string): Promise<Tweet[]> {

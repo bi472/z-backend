@@ -79,6 +79,7 @@ FRONTEND_URL=http://localhost:3000
 - Add transform interceptors to all routes.
 - Complete Swagger documentation.
 - Write tests for services.
+- Protect users routes
 
 ## Status
 

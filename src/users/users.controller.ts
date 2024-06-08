@@ -5,23 +5,23 @@ import {
     Get,
     HttpCode,
     HttpStatus,
-    Param, ParseFilePipeBuilder,
+    Param,
     Patch,
     Post,
-    Req, UploadedFile, UseFilters,
+    Query,
     UseGuards,
     UseInterceptors
 } from '@nestjs/common'
-import { UsersService } from './users.service'
+import { AuthGuard } from '@nestjs/passport'
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { TransformInterceptor } from '../common/transform.interceptor'
+import { TweetDto } from '../tweets/dto/tweet.dto'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { UserDto } from './dto/user.dto'
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
-import { TransformInterceptor } from '../common/transform.interceptor'
 import { User } from './entities/user.entity'
-import { AuthGuard } from '@nestjs/passport'
-import { TweetDto } from '../tweets/dto/tweet.dto'
-import { FileInterceptor } from '@nestjs/platform-express'
+import { UserProfileGuard } from './guard/user-profile.guard'
+import { UsersService } from './users.service'
 
 @ApiTags('users')
 @Controller('users')
@@ -66,12 +66,18 @@ export class UsersController {
         status: HttpStatus.OK,
         type: UserDto
     })
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'), UserProfileGuard)
     @Patch(':uuid')
     async update(
         @Param('uuid') uuid: string,
+        @Query('type') type: string,
         @Body() updateUserDto: UpdateUserDto
     ) {
+        if (type === 'biography') {
+            const { biography } = updateUserDto
+            return this.usersService.updateBio(uuid, biography)
+        }
+
         return this.usersService.update({ where: { uuid: uuid } }, updateUserDto)
     }
 
