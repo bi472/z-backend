@@ -1,12 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Req, UseGuards } from '@nestjs/common';
-import { FollowersService } from './followers.service';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Delete, Get, HttpStatus, Param, Patch, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { TransformInterceptor } from '../common/transform.interceptor';
 import { UserDto } from '../users/dto/user.dto';
 import { CreateFollowerDto } from './dto/create-follower.dto';
 import { DeleteFollowerDto } from './dto/delete-followers.dto';
+import { FollowersService } from './followers.service';
 
 @ApiTags('user-followers')
+@UseInterceptors(new TransformInterceptor(UserDto))
 @Controller('user-followers')
 export class FollowersController {
   constructor(

@@ -86,7 +86,7 @@ export class UsersController {
         status: HttpStatus.OK,
         type: UserDto
     })
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'), UserProfileGuard)
     @Delete(':uuid')
     async remove(@Param('uuid') uuid: string) {
         return this.usersService.delete({ where: { uuid: uuid } })

@@ -1,14 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateLikeDto } from './dto/create-like.dto';
-import { TweetsService } from '../tweets/tweets.service';
-import { UsersService } from '../users/users.service';
-import { DeleteLikeDto } from './dto/delete-like.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateNotificationDto } from '../notifications/dto/create-notification.dto';
 import { NotificationType } from '../notifications/notification-type.enum';
 import { NotificationsService } from '../notifications/notifications.service';
-import { Repository } from 'typeorm';
 import { Tweet } from '../tweets/entities/tweet.entity';
-import { InjectRepository } from '@nestjs/typeorm';
+import { TweetsService } from '../tweets/tweets.service';
+import { UsersService } from '../users/users.service';
+import { CreateLikeDto } from './dto/create-like.dto';
+import { DeleteLikeDto } from './dto/delete-like.dto';
 
 @Injectable()
 export class LikesService {
@@ -20,7 +20,7 @@ export class LikesService {
     private readonly notificationsService: NotificationsService
   ) { }
 
-  async like(dto: CreateLikeDto): Promise<any> {
+  async like(dto: CreateLikeDto): Promise<Tweet> {
     const tweet = await this.tweetsService.findOneOrFail({ where: { uuid: dto.tweetUuid }, relations: ['likedBy', 'user'], });
     const user = await this.usersService.findOneOrFail({ where: { uuid: dto.userUuid } });
     const isLiked = tweet.likedBy.some(u => u.uuid === user.uuid);
@@ -41,7 +41,7 @@ export class LikesService {
     return this.tweetsService.save(tweet);
   }
 
-  async dislike(dto: DeleteLikeDto): Promise<any> {
+  async dislike(dto: DeleteLikeDto): Promise<Tweet> {
     const tweet = await this.tweetsService.findOneOrFail({ where: { uuid: dto.tweetUuid }, relations: ['likedBy'] });
         const user = await this.usersService.findOneOrFail({ where: { uuid: dto.userUuid } });
 

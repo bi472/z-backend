@@ -1,18 +1,21 @@
 import {
     Controller,
-    Post,
+    Delete,
     HttpStatus,
-    UseInterceptors,
-    UseGuards, Req, UploadedFile,
-    Delete
+    Post,
+    Req, UploadedFile,
+    UseGuards,
+    UseInterceptors
 } from '@nestjs/common';
-import {AvatarsService} from './avatars.service';
-import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
-import {UserDto} from "../users/dto/user.dto";
-import {FileInterceptor} from "@nestjs/platform-express";
-import {AuthGuard} from "@nestjs/passport";
+import { AuthGuard } from "@nestjs/passport";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { TransformInterceptor } from '../common/transform.interceptor';
+import { UserDto } from "../users/dto/user.dto";
+import { AvatarsService } from './avatars.service';
 
 @ApiTags('avatars')
+@UseInterceptors(new TransformInterceptor(UserDto))
 @Controller('avatars')
 export class AvatarsController {
     constructor(private readonly avatarsService: AvatarsService) {

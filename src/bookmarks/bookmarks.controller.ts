@@ -1,13 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
-import { BookmarksService } from './bookmarks.service';
-import { Request } from 'express';
-import { CreateBookmarkDto } from './dto/create-bookmark.dto';
-import { UpdateBookmarkDto } from './dto/update-bookmark.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Delete, Get, Patch, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
+import { TransformInterceptor } from '../common/transform.interceptor';
+import { TweetDto } from '../tweets/dto/tweet.dto';
+import { BookmarksService } from './bookmarks.service';
+import { CreateBookmarkDto } from './dto/create-bookmark.dto';
 import { DeleteBookmarkDto } from './dto/delete-bookmark.dto';
 
 @ApiTags('bookmarks')
+@UseInterceptors(new TransformInterceptor(TweetDto))
 @Controller('bookmarks')
 export class BookmarksController {
   constructor(private readonly bookmarksService: BookmarksService) {}

@@ -1,6 +1,6 @@
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -12,7 +12,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  // noinspection JSUnusedGlobalSymbols
   async validate(payload: any) {
     return { uuid: payload.sub, username: payload.username };
   }
