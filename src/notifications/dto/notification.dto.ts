@@ -14,7 +14,7 @@ export class NotificationDto {
 
     @Expose()
     @ApiProperty()
-    read: boolean = false;
+    read = false;
 
     @Expose()
     @ApiProperty()

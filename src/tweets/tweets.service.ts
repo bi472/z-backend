@@ -85,8 +85,8 @@ export class TweetsService extends CrudBaseService<Tweet, CreateTweetDto, Update
     }
     async findByUsername(
         username: string,
-        offset: number = 0,
-        limit: number = 10
+        offset = 0,
+        limit = 10
     ): Promise<Tweet[]> {
         const user = await this.usersService.findOneOrFail({ where: { username } })
         // use query builder to get tweets by user with avatar

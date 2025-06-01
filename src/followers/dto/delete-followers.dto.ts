@@ -1,3 +1,3 @@
 import { CreateFollowerDto } from "./create-follower.dto";
 
-export interface DeleteFollowerDto extends CreateFollowerDto {}
+export type DeleteFollowerDto = CreateFollowerDto
