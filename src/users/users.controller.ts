@@ -27,8 +27,7 @@ import { UsersService } from './users.service'
 @Controller('users')
 @UseInterceptors(new TransformInterceptor(UserDto))
 export class UsersController {
-    constructor(private readonly usersService: UsersService) {
-    }
+    constructor(private readonly usersService: UsersService) {}
 
     @ApiOperation({ summary: 'Create user' })
     @ApiResponse({
@@ -48,7 +47,7 @@ export class UsersController {
     })
     @Get()
     async findAll(): Promise<User[]> {
-        return this.usersService.findMany({ relations: ['followers', 'following'] })
+        return this.usersService.findMany({ relations: ['followers', 'following', 'avatarFile'] })
     }
 
     @ApiOperation({ summary: 'Get user by UUID' })
@@ -58,7 +57,10 @@ export class UsersController {
     })
     @Get(':uuid')
     async findOne(@Param('uuid') uuid: string) {
-        return this.usersService.findOneOrFail({ where: { uuid: uuid } })
+        return this.usersService.findOneOrFail({
+            where: { uuid: uuid },
+            relations: ['avatarFile']
+        })
     }
 
     @ApiOperation({ summary: 'Update user by UUID' })
@@ -75,10 +77,18 @@ export class UsersController {
     ) {
         if (type === 'biography') {
             const { biography } = updateUserDto
-            return this.usersService.updateBio(uuid, biography)
+            const updatedUser = await this.usersService.updateBio(uuid, biography)
+            return this.usersService.findOneOrFail({
+                where: { uuid: uuid },
+                relations: ['avatarFile']
+            })
         }
 
-        return this.usersService.update({ where: { uuid: uuid } }, updateUserDto)
+        await this.usersService.update({ where: { uuid: uuid } }, updateUserDto)
+        return this.usersService.findOneOrFail({
+            where: { uuid: uuid },
+            relations: ['avatarFile']
+        })
     }
 
     @ApiOperation({ summary: 'Delete user by UUID' })
@@ -99,8 +109,11 @@ export class UsersController {
     })
     @Get('username/:username')
     async findOneByUsername(@Param('username') username: string) {
-        return this.usersService.findOneOrFail({ where: { username: username } })
-    }  
+        return this.usersService.findOneOrFail({
+            where: { username: username },
+            relations: ['avatarFile']
+        })
+    }
 
     @ApiOperation({ summary: 'Get likes of user' })
     @ApiResponse({

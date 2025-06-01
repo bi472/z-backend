@@ -1,19 +1,32 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, Generated, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+    BaseEntity,
+    Column,
+    CreateDateColumn,
+    Entity,
+    Generated,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn
+} from 'typeorm'
+import { Tweet } from '../../tweets/entities/tweet.entity'
 
 @Entity('files')
-export class File extends BaseEntity{
+export class File extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
-    uuid!: string;
+    uuid!: string
 
     @Column()
-    filename!: string;
+    filename!: string
 
     @Column()
-    path!: string;
+    path!: string
+
+    @ManyToOne(() => Tweet, tweet => tweet.images, { nullable: true })
+    tweet?: Tweet
 
     @CreateDateColumn()
-    createdAt!: Date;
+    createdAt!: Date
 
     @UpdateDateColumn()
-    updatedAt!: Date;
+    updatedAt!: Date
 }

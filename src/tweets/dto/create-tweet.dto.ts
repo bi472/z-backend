@@ -1,8 +1,12 @@
-import { IsNotEmpty, MaxLength } from 'class-validator';
+import { IsNotEmpty, MaxLength, IsOptional, IsArray } from 'class-validator'
 
 export class CreateTweetDto {
     @IsNotEmpty()
-    content: string;
+    content: string
 
-    userUuid: string;
+    @IsOptional()
+    @IsArray()
+    imageFiles?: string[] // UUIDs of uploaded files
+
+    userUuid: string
 }

@@ -1,43 +1,48 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as cookieParser from 'cookie-parser';
+import { NestFactory } from '@nestjs/core'
+import { AppModule } from './app.module'
+import { ValidationPipe } from '@nestjs/common'
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import * as cookieParser from 'cookie-parser'
+import { json, urlencoded } from 'express'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule)
 
-  const config = new DocumentBuilder()
-    .setTitle('NestJS API')
-    .setDescription('REST API documentation')
-    .setVersion('1.0.0')
-    .addTag('nestjs')
-    .build();
+    // Увеличиваем лимиты для body parser
+    app.use(json({ limit: '25mb' }))
+    app.use(urlencoded({ extended: true, limit: '25mb' }))
 
-  const document = SwaggerModule.createDocument(app, config);
+    const config = new DocumentBuilder()
+        .setTitle('NestJS API')
+        .setDescription('REST API documentation')
+        .setVersion('1.0.0')
+        .addTag('nestjs')
+        .build()
 
-  SwaggerModule.setup('/api/docs', app, document);
+    const document = SwaggerModule.createDocument(app, config)
 
-  const origin = process.env.FRONTEND_URL;
+    SwaggerModule.setup('/api/docs', app, document)
 
-  app.enableCors({
-    origin,
-    credentials: true,
-  });
+    const origin = process.env.FRONTEND_URL
 
-  app.use(cookieParser());
+    app.enableCors({
+        origin,
+        credentials: true
+    })
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true, 
-      transform: true, 
-      forbidNonWhitelisted: true, 
-      transformOptions: {
-        enableImplicitConversion: true, 
-      },
-    }),
-  );
+    app.use(cookieParser())
 
-  await app.listen(5000);
+    app.useGlobalPipes(
+        new ValidationPipe({
+            whitelist: true,
+            transform: true,
+            forbidNonWhitelisted: true,
+            transformOptions: {
+                enableImplicitConversion: true
+            }
+        })
+    )
+
+    await app.listen(5000)
 }
-bootstrap();
+bootstrap()
